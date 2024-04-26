@@ -5,19 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .home-container{
+            display:grid;
+            grid-template-columns: 1fr 3fr;
+        }
+    </style>
 </head>
 <body>
     {%extends 'main.html' %}
     {%block content%}
    
 
-    <h1>this is html template</h1>
-    <div>
-        <a href="{% url 'create_room' %}">create_room</a>
+    <div class="home-container">
         <div>
-            <a href="{% url 'update-room' room.id %}">Edit</a>
+            <h3>Browse Topic</h3>
+            <hr>
+            <div>
+                <a href="{% url 'home' %}">ALL</a>
+            </div>
+            {%for topic in topics %}
+            <div>
+                <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+            </div>
+            {%endfor%}
+        </div>
+        <div>
+            <h5>{{room_count}} rooms available</h5>
+        <a href="{% url 'create_room' %}">create_room</a>
+        
+            
             {% for room in rooms %}
                 <div>
+                    <a href="{% url 'update-room' room.id %}">Edit</a>
+                    <a href="{% url 'delete-room' room.id %}">Delete</a>
                     <span>@{{room.host.username}}</span>
                     <h5>{{room.id}}---<a href="{%url 'room' room.id %}">{{room.name}}</a></h5>
                     <small>{{room.topic.name}}</small>
@@ -26,6 +47,8 @@
             {%endfor%}
         </div>
     </div>
+       
+    
     
     
     {%endblock content%}
