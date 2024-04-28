@@ -111,21 +111,24 @@ def deletemessage(request,pk):
 @login_required(login_url='login')
 def create_room(request):
     form = RoomForms()
+    # topics=topic.objects.all()
     if request.method=='POST':
+        
         form=RoomForms(request.POST)
         if form.is_valid():
             room=form.save(commit=False)
             room.host=request.user
             room.save()
             
-            return redirect('home')        
-    context={'form':form}    
-    return render(request,'base/create_room.html',context)
+        return redirect('home')        
+    context={'form':form,}    
+    return render(request,'base/room_form.html',context)
 
 @login_required(login_url='login')
 def updateroom(request,pk):
     room=Room.objects.get(id=pk)
     form=RoomForms(instance=room)
+    # topics=topic.objects.all()
 
     if request.user != room.host:
         return HttpResponse('You are not allowed here!!')
@@ -136,7 +139,7 @@ def updateroom(request,pk):
             form.save()
             return redirect('home')
         
-    context={'form':form}
+    context={'form':form,}
     return render(request,'base/create_room.html',context)
 
 @login_required(login_url='login')
@@ -150,5 +153,9 @@ def deleteroom(request,pk):
         room.delete()
         return redirect('home')
     return render(request,'base/delete.html',{'obj':room})
+
+@login_required(login_url='login')
+def updateUser(request):
+    return render(request,'base/update-user.html')
        
 
